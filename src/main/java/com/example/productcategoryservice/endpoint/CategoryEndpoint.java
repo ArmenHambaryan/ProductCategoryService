@@ -24,16 +24,13 @@ public class CategoryEndpoint {
 
     @GetMapping("/categories")
     public List<CategoryResponseDto> getAllCategories() {
-        return  categoryMapper.map(categoryService.showAllCategories());
+        return categoryMapper.map(categoryService.showAllCategories());
     }
 
     @GetMapping("/categories/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable("id") int id) {
-        Optional<Category> byId = categoryService.findById(id);
-        if (byId.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(byId.get());
+    public ResponseEntity<?> getCategoryById(@PathVariable("id") int id) {
+        categoryService.findById(id);
+        return ResponseEntity.ok(categoryMapper.map(categoryService.findById(id)));
     }
 
     @PostMapping("/categories")

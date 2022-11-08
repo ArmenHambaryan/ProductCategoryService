@@ -1,6 +1,8 @@
 package com.example.productcategoryservice.service;
 
 
+import com.example.productcategoryservice.excepion.NotFoundException;
+import com.example.productcategoryservice.model.Category;
 import com.example.productcategoryservice.model.Product;
 import com.example.productcategoryservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +23,29 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<Product> findById(int id) {
-        return productRepository.findById(id);
+    public Product findById(int id) {
+        Optional<Product> byId = productRepository.findById(id);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("not found product by id");
+        }
+        return byId.get();
     }
 
     public void save(Product product) {
+        if (product == null) {
+            throw new RuntimeException("product cant be null");
+        }
         productRepository.save(product);
     }
 
     public void deleteById(int id) {
-        productRepository.deleteById(id);
-    }
+        if (id == 0) {
+            throw new NumberFormatException("id with 0 dont exist");}
 
+            productRepository.deleteById(id);
+        }
     public List<Product> findAllByCategoryId(int id) {
+
         return productRepository.findAllByCategoryId(id);
     }
 }

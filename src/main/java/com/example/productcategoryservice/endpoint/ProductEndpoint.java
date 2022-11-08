@@ -28,12 +28,9 @@ public class ProductEndpoint {
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") int id) {
-        Optional<Product> byId = productService.findById(id);
-        if (byId.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(byId.get());
+    public ResponseEntity<?> getProductById(@PathVariable("id") int id) {
+        productService.findById(id);
+        return ResponseEntity.ok(productMapper.map(productService.findById(id)));
     }
 
     @PostMapping("/products")
